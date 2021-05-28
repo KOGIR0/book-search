@@ -7,6 +7,7 @@ class BookSearch extends React.Component {
 
     this.state = {
       timerId: 0,
+      searchResult: []
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -15,7 +16,14 @@ class BookSearch extends React.Component {
 
   search(value)
   {
-    console.log(value);
+    const url = 'http://openlibrary.org/search.json?q=' + value.split(' ').join("+");
+    console.log(url);
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.docs);
+        this.setState({ searchResult: data.docs })
+      });
   }
 
   handleChange(e)
@@ -26,6 +34,7 @@ class BookSearch extends React.Component {
     });
   }
 
+  // 
   render() {
     return (
       <div className="App">
