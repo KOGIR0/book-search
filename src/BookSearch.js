@@ -11,6 +11,7 @@ class Book extends React.Component {
     this.state = {
       imgSrc_S:     imgSrc.imgSrc_S,
       imgSrc_M:     imgSrc.imgSrc_M,
+      imgSrc_L:     imgSrc.imgSrc_L,
       title:        props.data.title,
       author:       props.data.hasOwnProperty("author_name")  ? 
                     props.data.author_name : "unknown author",
@@ -19,7 +20,8 @@ class Book extends React.Component {
       publish_date: props.data.hasOwnProperty("publish_date") ? 
                     props.data.publish_date[0] : "unknown publish_date",
       isbn:         props.data.hasOwnProperty("isbn")         ? 
-                    props.data.isbn[0] : "unhnown isbn"
+                    props.data.isbn[0] : "unhnown isbn",
+      display:      false
     }
     
   }
@@ -48,23 +50,57 @@ class Book extends React.Component {
       });
     }
 
-    let imgSrc_M = imgSrc + "-M.jpg";
-    let imgSrc_S = imgSrc + "-S.jpg";
+    let imgSrc_S = imgSrc + "-S.jpg?default=false";
+    let imgSrc_M = imgSrc + "-M.jpg?default=false";
+    let imgSrc_L = imgSrc + "-L.jpg?default=false";
 
-    return {imgSrc_S: imgSrc_S, imgSrc_M: imgSrc_M};
+    return {imgSrc_S: imgSrc_S, imgSrc_M: imgSrc_M, imgSrc_L: imgSrc_L};
   }
 
   render() {
+    const onClick = () => this.setState({display: !this.state.display});
+
     return(
-      <div style={{display: 'flex', flexDirection: "row"}}>
-        <img src={this.state.imgSrc_S} alt=""/>
-        <img src={this.state.imgSrc_M} alt="" style={{display: 'none'}}/>
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          <div>Title:        {this.state.title}</div>
-          <div>Author:       {this.state.author}</div>
-          <div>Publisher:    {this.state.publisher}</div>
-          <div>Publish date: {this.state.publish_date}</div>
-          <div>ISBN:         {this.state.isbn}</div>
+      <div onClick={onClick} className="book-item">
+        {
+          !this.state.display ?
+          <img className="img-medium" src={this.state.imgSrc_M} alt="No Medium Cover"/>
+          : null
+        }
+        {
+          this.state.display ?
+          <img className="img-large" src={this.state.imgSrc_L} alt="No Large Cover"/>
+          : null
+        }
+        <div className="info-block">
+          <div class="info-field">
+            <span className="title">Title:</span>{this.state.title}
+          </div>
+          <div class="info-field">
+            <span className="title">Author:</span>{this.state.author}
+          </div>
+          {/*this part is shown on click*/}
+          {
+            this.state.display ?
+            <div class="info-field">
+              <span className="title">Publisher:</span>{this.state.publisher}
+            </div>
+            : null 
+          }
+          {
+            this.state.display ?
+            <div class="info-field">
+              <span className="title">Publish date:</span> {this.state.publish_date}
+            </div>
+            : null
+          }
+          {
+            this.state.display ?
+            <div class="info-field">
+              <span className="title">ISBN:</span> {this.state.isbn}
+            </div>
+            : null
+          }
         </div>
       </div>
     );
@@ -73,10 +109,8 @@ class Book extends React.Component {
 
 function BooksList(props) {
   let bookItems = props.data.map((data) => {
-
-    
     return (
-      <li key={data.key}>
+      <li class="books-list" key={data.key}>
         <Book data={data}/>
       </li>
     );
@@ -130,7 +164,9 @@ class BookSearch extends React.Component {
   render() {
     return (
       <div className="App">
-        <input type="text" onChange={this.handleChange}></input>
+        <div style={{textAlign: "center"}}>
+          <input type="text" onChange={this.handleChange}></input>
+        </div>
         <BooksList data={this.state.searchResult}/>
       </div>
     );
