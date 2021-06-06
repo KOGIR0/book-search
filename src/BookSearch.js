@@ -1,17 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './BookSearch.css';
+import {store, constants} from './reducerStorage';
 
-class Book extends React.Component {
+class Book extends React.Component
+{
   constructor(props)
   {
     super(props);
 
     let imgSrc = this.createImgSrc(props.data);
 
-    this.state = {
-      imgSrc_S:     imgSrc.imgSrc_S,
-      imgSrc_M:     imgSrc.imgSrc_M,
-      imgSrc_L:     imgSrc.imgSrc_L,
+    this.state =
+    {
+      imgSrc_S:     imgSrc + "-S.jpg?default=false",
+      imgSrc_M:     imgSrc + "-M.jpg?default=false",
+      imgSrc_L:     imgSrc + "-L.jpg?default=false",
       title:        props.data.title,
       author:       props.data.hasOwnProperty("author_name")  ? 
                     props.data.author_name : "unknown author",
@@ -23,7 +27,8 @@ class Book extends React.Component {
                     props.data.isbn[0] : "unhnown isbn",
       display:      false
     }
-    
+
+    this.onError = this.onError.bind(this);
   }
 
   createImgSrc(data)
@@ -37,11 +42,18 @@ class Book extends React.Component {
     {
       imgSrc = "http://covers.openlibrary.org/b/id/" + data["cover_i"].toString();
     }
+    else if(data.hasOwnProperty("last_modified_i"))
+    {
+      imgSrc = "http://covers.openlibrary.org/b/id/" + data["last_modified_i"].toString();
+    }
     else if(data.hasOwnProperty("edition_key"))
     {
       imgSrc = "http://covers.openlibrary.org/b/olid/" + data["edition_key"][0].toString();
-    } else {
-      properties.forEach((key) => {
+    }
+    else if(properties.some((key) => data.hasOwnProperty(key)))
+    {
+      properties.forEach((key) =>
+      {
         if(data.hasOwnProperty(key))
         {
           imgSrc = "http://covers.openlibrary.org/b/" + 
@@ -50,54 +62,64 @@ class Book extends React.Component {
       });
     }
 
-    let imgSrc_S = imgSrc + "-S.jpg?default=false";
-    let imgSrc_M = imgSrc + "-M.jpg?default=false";
-    let imgSrc_L = imgSrc + "-L.jpg?default=false";
-
-    return {imgSrc_S: imgSrc_S, imgSrc_M: imgSrc_M, imgSrc_L: imgSrc_L};
+    return imgSrc;
   }
 
-  render() {
-    const onClick = () => this.setState({display: !this.state.display});
+  onError()
+  {
+    this.setState({
+      imgSrc_L: "/NoBookCover.jpg",
+      imgSrc_M: "/NoBookCover.jpg",
+      imgSrc_S: "/NoBookCover.jpg",
+    });
+    store.dispatch({key: this.props.data.key, type: constants.CHANGE_IMG_SRC, imgSrc: "/NoBookCover.jpg"});
+  }
 
-    return(
+  render()
+  {
+    const onClick = () => {
+      this.setState({display: !this.state.display});
+      store.dispatch({key: this.props.data.key, type: constants.SHOW_ADITIONAL_INFO});
+    }
+
+    return (
       <div onClick={onClick} className="book-item">
         {
-          !this.state.display ?
-          <img className="img-medium" src={this.state.imgSrc_M} alt="No Medium Cover"/>
+          !this.props.data.display ?
+          <img className="img-medium" src={this.props.data.imgSrc_M} onError={this.onError} alt="No Medium Cover"/>
           : null
         }
         {
-          this.state.display ?
-          <img className="img-large" src={this.state.imgSrc_L} alt="No Large Cover"/>
+          this.props.data.display ?
+          <img className="img-large" src={this.props.data.imgSrc_L} onError={this.onError} alt="No Large Cover"/>
           : null
         }
         <div className="info-block">
-          <div class="info-field">
-            <span className="title">Title:</span>{this.state.title}
+          <div className="info-field">
+            <span className="title">Title:</span>{this.props.data.title}
           </div>
-          <div class="info-field">
-            <span className="title">Author:</span>{this.state.author}
+          <div className="info-field">
+            <span className="title">Author:</span>{this.props.data.author}
           </div>
           {/*this part is shown on click*/}
           {
-            this.state.display ?
-            <div class="info-field">
-              <span className="title">Publisher:</span>{this.state.publisher}
+            this.props.data.display ?
+            <div className="info-field">
+              <span className="title">Publisher:</span>{this.props.data.publisher}
             </div>
             : null 
           }
           {
-            this.state.display ?
-            <div class="info-field">
-              <span className="title">Publish date:</span> {this.state.publish_date}
+            this.props.data.display ?
+            <div className="info-field">
+              <span className="title">Publish date:</span> {this.props.data.publish_date}
             </div>
             : null
           }
           {
-            this.state.display ?
-            <div class="info-field">
-              <span className="title">ISBN:</span> {this.state.isbn}
+            this.props.data.display ?
+            <div className="info-field">
+              <span className="title">ISBN:</span> {this.props.data.isbn}
             </div>
             : null
           }
@@ -107,10 +129,12 @@ class Book extends React.Component {
   }
 }
 
-function BooksList(props) {
-  let bookItems = props.data.map((data) => {
+function BooksList(props)
+{
+  let bookItems = props.data.map((data) => 
+  {
     return (
-      <li class="books-list" key={data.key}>
+      <li className="books-list" key={data.key}>
         <Book data={data}/>
       </li>
     );
@@ -121,11 +145,14 @@ function BooksList(props) {
   );
 }
 
-class BookSearch extends React.Component {
-  constructor(props) {
+class BookSearch extends React.Component
+{
+  constructor(props)
+  {
     super(props);
 
-    this.state = {
+    this.state = 
+    {
       timerId: 0,
       searchResult: []
     }
@@ -148,8 +175,13 @@ class BookSearch extends React.Component {
           }
         }
       )
-      .then(data => {
-        this.setState({ searchResult: data.docs })
+      .then(data =>
+      {
+        this.props.dispatch({
+          type: constants.ADD_BOOKS,
+          books: data.docs
+        });
+        this.setState({ searchResult: data.docs });
       });
   }
 
@@ -161,16 +193,26 @@ class BookSearch extends React.Component {
     });
   }
 
-  render() {
+  render()
+  {
     return (
-      <div className="App">
+      <div>
         <div style={{textAlign: "center"}}>
           <input type="text" onChange={this.handleChange}></input>
         </div>
-        <BooksList data={this.state.searchResult}/>
+        <BooksList data={this.props.books}/>
       </div>
     );
   }
 }
 
-export default BookSearch;
+function mapStateToProps(state)
+{
+  return {
+    books: state.books
+  }
+}
+
+
+
+export default connect(mapStateToProps)(BookSearch);

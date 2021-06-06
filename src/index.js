@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import BookSearch from './BookSearch';
+import {Provider} from 'react-redux';
+import {store} from './reducerStorage';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <BookSearch />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
