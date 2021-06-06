@@ -9,76 +9,17 @@ class Book extends React.Component
   {
     super(props);
 
-    let imgSrc = this.createImgSrc(props.data);
-
-    this.state =
-    {
-      imgSrc_S:     imgSrc + "-S.jpg?default=false",
-      imgSrc_M:     imgSrc + "-M.jpg?default=false",
-      imgSrc_L:     imgSrc + "-L.jpg?default=false",
-      title:        props.data.title,
-      author:       props.data.hasOwnProperty("author_name")  ? 
-                    props.data.author_name : "unknown author",
-      publisher:    props.data.hasOwnProperty("publisher")    ? 
-                    props.data.publisher[0] : "unknown publisher",
-      publish_date: props.data.hasOwnProperty("publish_date") ? 
-                    props.data.publish_date[0] : "unknown publish_date",
-      isbn:         props.data.hasOwnProperty("isbn")         ? 
-                    props.data.isbn[0] : "unhnown isbn",
-      display:      false
-    }
-
     this.onError = this.onError.bind(this);
-  }
-
-  createImgSrc(data)
-  {
-    let imgSrc = "";
-
-    //ISBN, OCLC, LCCN, OLID and ID
-    let properties = ["isbn", "lccn", "oclc", "id"];
-
-    if(data.hasOwnProperty("cover_i"))
-    {
-      imgSrc = "http://covers.openlibrary.org/b/id/" + data["cover_i"].toString();
-    }
-    else if(data.hasOwnProperty("last_modified_i"))
-    {
-      imgSrc = "http://covers.openlibrary.org/b/id/" + data["last_modified_i"].toString();
-    }
-    else if(data.hasOwnProperty("edition_key"))
-    {
-      imgSrc = "http://covers.openlibrary.org/b/olid/" + data["edition_key"][0].toString();
-    }
-    else if(properties.some((key) => data.hasOwnProperty(key)))
-    {
-      properties.forEach((key) =>
-      {
-        if(data.hasOwnProperty(key))
-        {
-          imgSrc = "http://covers.openlibrary.org/b/" + 
-                    key.toString() + "/" + data[key][0].toString();
-        }
-      });
-    }
-
-    return imgSrc;
   }
 
   onError()
   {
-    this.setState({
-      imgSrc_L: "/NoBookCover.jpg",
-      imgSrc_M: "/NoBookCover.jpg",
-      imgSrc_S: "/NoBookCover.jpg",
-    });
     store.dispatch({key: this.props.data.key, type: constants.CHANGE_IMG_SRC, imgSrc: "/NoBookCover.jpg"});
   }
 
   render()
   {
     const onClick = () => {
-      this.setState({display: !this.state.display});
       store.dispatch({key: this.props.data.key, type: constants.SHOW_ADITIONAL_INFO});
     }
 
@@ -153,8 +94,7 @@ class BookSearch extends React.Component
 
     this.state = 
     {
-      timerId: 0,
-      searchResult: []
+      timerId: 0
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -181,7 +121,6 @@ class BookSearch extends React.Component
           type: constants.ADD_BOOKS,
           books: data.docs
         });
-        this.setState({ searchResult: data.docs });
       });
   }
 
