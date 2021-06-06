@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import BookSearch from './BookSearch';
+import BookSearch from './components/BookSearch';
 import {Provider} from 'react-redux';
 import {store} from './reducerStorage';
 
