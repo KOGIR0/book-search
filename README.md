@@ -2,10 +2,10 @@
 
 ## Images
 
-![alt img not available](https://www.dropbox.com/s/ot62do5ffj1fqon/da_1.png?dl=0)
-![alt img not available](https://www.dropbox.com/s/5o00txwkng5j474/da_2.png?dl=0)
-![alt img not available](https://www.dropbox.com/s/hk7qjbhvkf77t23/tlotr_1.png?dl=0)
-![alt img not available](https://www.dropbox.com/s/uw659z0yqh8eavw/tlotr_2.png?dl=0)
+![img not available](https://www.dropbox.com/s/ot62do5ffj1fqon/da_1.png?dl=0)
+![img not available](https://www.dropbox.com/s/5o00txwkng5j474/da_2.png?dl=0)
+![img not available](https://www.dropbox.com/s/hk7qjbhvkf77t23/tlotr_1.png?dl=0)
+![img not available](https://www.dropbox.com/s/uw659z0yqh8eavw/tlotr_2.png?dl=0)
 
 ## Available Scripts
 
