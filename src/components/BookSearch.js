@@ -55,7 +55,7 @@ class BookSearch extends React.Component
     return (
       <div>
         <div style={{textAlign: "center"}}>
-          <input type="text" onChange={this.handleChange}></input>
+          <input id="search-input" type="text" onChange={this.handleChange}></input>
         </div>
         <BooksList data={this.props.books} dispatch={this.props.dispatch}/>
       </div>
