@@ -1,8 +1,5 @@
 import {createStore} from 'redux'
-
-const ADD_BOOKS           = "ADD_BOOKS";
-const CHANGE_IMG_SRC      = "CHANGE_IMG_SRC";
-const SHOW_ADITIONAL_INFO = "SHOW_ADITIONAL_INFO";
+import * as CONST from './constants'
 
 const initialState = {
     books: []
@@ -46,12 +43,11 @@ function reducer(state = initialState, action = {})
 {
     switch (action.type)
     {
-        case ADD_BOOKS:
+        case CONST.ADD_BOOKS:
           return {
             books: action.books.map((book) => {
                 let imgSrc = createImgSrc(book);
                 return {
-                    imgSrc_S:     imgSrc + "-S.jpg?default=false",
                     imgSrc_M:     imgSrc + "-M.jpg?default=false",
                     imgSrc_L:     imgSrc + "-L.jpg?default=false",
                     key:          book.key,
@@ -63,12 +59,12 @@ function reducer(state = initialState, action = {})
                     publish_date: book.hasOwnProperty("publish_date") ? 
                                   book.publish_date[0] : "unknown publish_date",
                     isbn:         book.hasOwnProperty("isbn")         ? 
-                                  book.isbn[0] : "unhnown isbn",
+                                  book.isbn[0] : "unknown isbn",
                     display:      false
                 }
             })
           }
-        case CHANGE_IMG_SRC:
+        case CONST.CHANGE_IMG_SRC:
             return {
               books: state.books.map((book) => {
               if(book.key === action.key)
@@ -79,7 +75,7 @@ function reducer(state = initialState, action = {})
               }
               return book;
             })}
-        case SHOW_ADITIONAL_INFO:
+        case CONST.SHOW_ADITIONAL_INFO:
             return {
               books: state.books.map((book) => {
               if(book.key === action.key)
@@ -96,14 +92,4 @@ function reducer(state = initialState, action = {})
     }
 }
 
-let store = createStore(reducer);
-let constants = {
-    ADD_BOOKS,
-    CHANGE_IMG_SRC,
-    SHOW_ADITIONAL_INFO
-}
-
-export {
-    store,
-    constants
-};
+export let store = createStore(reducer);

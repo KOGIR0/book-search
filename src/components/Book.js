@@ -1,5 +1,5 @@
 import React from 'react';
-import { constants } from '../reducerStorage'
+import * as CONST from '../constants'
 
 class Book extends React.Component
 {
@@ -13,7 +13,7 @@ class Book extends React.Component
   {
     this.props.dispatch({
       key: this.props.data.key,
-      type: constants.CHANGE_IMG_SRC,
+      type: CONST.CHANGE_IMG_SRC,
       imgSrc: "/NoBookCover.jpg"
     });
   }
@@ -23,17 +23,19 @@ class Book extends React.Component
     const onClick = () => {
       this.props.dispatch({
         key: this.props.data.key,
-        type: constants.SHOW_ADITIONAL_INFO
+        type: CONST.SHOW_ADITIONAL_INFO
       });
     }
 
     return (
       <div onClick={onClick} className="book-item">
+        {/*medium cover displaied by default*/}
         {
           !this.props.data.display ?
           <img className="img-medium" src={this.props.data.imgSrc_M} onError={this.onError} alt="No Medium Cover"/>
           : null
         }
+        {/* large cover displaied on click*/}
         {
           this.props.data.display ?
           <img className="img-large" src={this.props.data.imgSrc_L} onError={this.onError} alt="No Large Cover"/>

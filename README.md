@@ -2,10 +2,10 @@
 
 ## Images
 
-![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/da_1.png)
-![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/da_2.png)
-![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/tlotr_1.png)
-![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/tlotr_2.png)
+![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/dam_1.png)
+![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/dam_2.png)
+![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/hp_1.png)
+![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/hp_2.png)
 
 ## Available Scripts
 

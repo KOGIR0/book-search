@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './BookSearch.css';
-import { constants } from '../reducerStorage';
+import * as CONST from '../constants';
 import BooksList from './BooksList';
 
 class BookSearch extends React.Component
@@ -9,7 +9,6 @@ class BookSearch extends React.Component
   constructor(props)
   {
     super(props);
-
     this.state = 
     {
       timerId: 0
@@ -36,7 +35,7 @@ class BookSearch extends React.Component
       .then(data =>
       {
         this.props.dispatch({
-          type: constants.ADD_BOOKS,
+          type: CONST.ADD_BOOKS,
           books: data.docs
         });
       });
@@ -55,7 +54,7 @@ class BookSearch extends React.Component
     return (
       <div>
         <div style={{textAlign: "center"}}>
-          <input id="search-input" type="text" onChange={this.handleChange}></input>
+          <label>Search:</label><input id="search-input" type="text" onChange={this.handleChange} placeholder="Enter book name or author"></input>
         </div>
         <BooksList data={this.props.books} dispatch={this.props.dispatch}/>
       </div>
