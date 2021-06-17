@@ -1,5 +1,7 @@
 # Book Search React App
 
+Project uses ReactJS and Redux
+
 ## Images
 
 ![img not available](https://github.com/KOGIR0/book-search/blob/main/imgs/dam_1.png)
